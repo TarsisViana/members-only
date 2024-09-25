@@ -3,57 +3,51 @@
 import "dotenv/config";
 import pg from "pg";
 const { Client } = pg;
-import itemString from "./inventory.js";
+
+function time() {
+  return new Date().toISOString().slice(0, 19).replace("T", " ");
+}
 
 const SQL = `
-CREATE TABLE IF NOT EXISTS categories (
-  categoryId  INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name VARCHAR (500)
+CREATE TABLE IF NOT EXISTS members (
+  memberid  INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  firstname VARCHAR (255),
+  lastname VARCHAR (255),
+  password VARCHAR (255),
+  email VARCHAR (255),
+  club_member BOOLEAN NOT NULL DEFAULT false
 );
 
-INSERT INTO categories (name)
-VALUES ('men''s clothing'),
-       ('jewelery'),
-       ('electronics'),
-       ('women''s clothing');
 
-CREATE TABLE IF NOT EXISTS inventory (
-  itemID INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  title VARCHAR ( 500 ),
-  price FLOAT,
-  description TEXT,
-  image VARCHAR(500),
-  category INTEGER,
-  rating_rate FLOAT,
-  rating_count INTEGER,
-  FOREIGN KEY (category) REFERENCES categories (categoryId)
+
+CREATE TABLE IF NOT EXISTS messages (
+  messageid  INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  msgtext TEXT,
+  added TIMESTAMP,
+  userid INTEGER,
+  FOREIGN KEY (userid) REFERENCES members (memberid)
 );
 
-INSERT INTO inventory (title, price, description, image, category, rating_rate, rating_count)
-VALUES 
-  ${itemString}
-;
+INSERT INTO members (firstname, lastname, password, email, club_member) 
+VALUES ('teste1', 'mista','tete','teste@gmail.com',true);
 
-CREATE TABLE IF NOT EXISTS cart (
-  cartid INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  itemid SMALLINT CHECK (itemid >=0),
-  amount SMALLINT CHECK (amount >0),
-  FOREIGN KEY (itemid) REFERENCES inventory (itemid),
-  UNIQUE (itemid)
-);
-
-INSERT INTO cart (itemid, amount) 
-VALUES ('2','1');
+INSERT INTO messages (msgtext, added,userid) 
+VALUES ('first message', '${time()}','1');
 `;
 
 async function main() {
   console.log("seeding...");
-  const client = new Client({
-    connectionString: `postgresql://${process.env.USER}:${process.env.USER_PASSWORD}@${process.env.HOST}:${process.env.DEFAULT_PORT}/${process.env.DATABASE}`,
-  });
-  await client.connect();
-  await client.query(SQL);
-  await client.end();
+  try {
+    const client = new Client({
+      connectionString: `postgresql://${process.env.USER}:${process.env.USER_PASSWORD}@${process.env.HOST}:${process.env.DEFAULT_PORT}/${process.env.DATABASE}`,
+    });
+    await client.connect();
+    await client.query(SQL);
+    await client.end();
+  } catch (err) {
+    console.log(err);
+    return;
+  }
   console.log("done");
 }
 
