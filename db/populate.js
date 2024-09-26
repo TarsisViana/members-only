@@ -9,13 +9,14 @@ function time() {
 }
 
 const SQL = `
-CREATE TABLE IF NOT EXISTS members (
-  memberid  INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE IF NOT EXISTS users (
+  userid  INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   firstname VARCHAR (255),
   lastname VARCHAR (255),
   password VARCHAR (255),
   email VARCHAR (255),
-  club_member BOOLEAN NOT NULL DEFAULT false
+  salt VARCHAR (255),
+  member BOOLEAN NOT NULL DEFAULT false
 );
 
 
@@ -25,15 +26,15 @@ CREATE TABLE IF NOT EXISTS messages (
   msgtext TEXT,
   added TIMESTAMP,
   userid INTEGER,
-  FOREIGN KEY (userid) REFERENCES members (memberid)
+  FOREIGN KEY (userid) REFERENCES users (userid)
 );
+`;
 
-INSERT INTO members (firstname, lastname, password, email, club_member) 
+const test = `INSERT INTO users (firstname, lastname, password, email, member) 
 VALUES ('teste1', 'mista','tete','teste@gmail.com',true);
 
 INSERT INTO messages (msgtext, added,userid) 
-VALUES ('first message', '${time()}','1');
-`;
+VALUES ('first message', '${time()}','1');`;
 
 async function main() {
   console.log("seeding...");

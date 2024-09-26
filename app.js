@@ -24,14 +24,12 @@ app.use(
   session({
     store: new pgSession({
       pool: pgPool, // Connection pool
-      tableName: "session", // Use another table-name than the default "session" one
-      // Insert connect-pg-simple options here
+      createTableIfMissing: true,
     }),
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
-    // Insert express-session options here
   })
 );
 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign-up</title>
+  </head>
+  <body>
+    <h1>Register Page</h1>
+    <%- include("partials/errors.ejs") %>
+    <form method="post" action="register">
+      <label>
+        First Name:<br /><input
+          type="text"
+          name="firstname"
+          value="<%= locals.firstname %>"
+        />
+      </label>
+      <br />
+      <label>
+        Last Name:<br /><input
+          type="text"
+          name="lastname"
+          value="<%= locals.lastname %>"
+        />
+      </label>
+      <br />
+      <label>
+        Enter Email:<br /><input
+          type="text"
+          name="email"
+          value="<%= locals.email %>"
+        />
+      </label>
+      <br />
+      <label>
+        Enter Password:<br /><input
+          type="password"
+          name="password"
+          value="<%= locals.password %>"
+        />
+      </label>
+      <br />
+      <label>
+        Confirm Password:<br /><input type="password" name="confirm-pw" />
+      </label>
+      <br />
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
+</html>

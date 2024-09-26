@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 import passport from "passport";
 import { genPassword } from "../lib/passwordUtils.js";
-import { saveUser } from "../db/queries.js";
+import { newMember } from "../controllers/register-controllers.js";
 
 /**
  * -------------- POST ROUTES ----------------
@@ -16,17 +16,7 @@ router.post(
   })
 );
 
-// TODO
-router.post("/register", async (req, res, next) => {
-  const saltHash = genPassword(req.body.pw);
-
-  const salt = saltHash.salt;
-  const hash = saltHash.hash;
-
-  user = await saveUser(req.body.uname, hash, salt);
-  console.log(user);
-  res.redirect("/login");
-});
+router.post("/register", newMember);
 
 /**
  * -------------- GET ROUTES ----------------
@@ -47,15 +37,8 @@ router.get("/login", (req, res, next) => {
   res.send(form);
 });
 
-// When you visit http://localhost:3000/register, you will see "Register Page"
 router.get("/register", (req, res, next) => {
-  const form =
-    '<h1>Register Page</h1><form method="post" action="register">\
-                    Enter Username:<br><input type="text" name="uname">\
-                    <br>Enter Password:<br><input type="password" name="pw">\
-                    <br><br><input type="submit" value="Submit"></form>';
-
-  res.send(form);
+  res.render("sign-up-form");
 });
 
 router.get("/protected-route", (req, res, next) => {
