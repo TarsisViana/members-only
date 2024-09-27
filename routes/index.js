@@ -15,8 +15,9 @@ import memberRouter from "./member.js";
 router.post(
   "/login",
   passport.authenticate("local", {
-    failureRedirect: "/login-failure",
+    failureRedirect: "/login",
     successRedirect: "/feed",
+    failureMessage: true,
   })
 );
 
@@ -32,7 +33,12 @@ router.get("/", getHomepage);
 
 // When you visit http://localhost:3000/login, you will see "Login Page"
 router.get("/login", (req, res, next) => {
-  res.render("login");
+  if (req.session.messages) {
+    const msg = req.session.messages[req.session.messages.length - 1];
+    res.render("login", { errors: [{ msg }] });
+  } else {
+    res.render("login");
+  }
 });
 
 router.get("/register", (req, res, next) => {
@@ -53,16 +59,6 @@ router.get("/logout", (req, res, next) => {
     }
   });
   res.redirect("/");
-});
-
-router.get("/login-success", (req, res, next) => {
-  res.send(
-    '<p>You successfully logged in. --> <a href="/protected-route">Go to protected route</a></p>'
-  );
-});
-
-router.get("/login-failure", (req, res, next) => {
-  res.send("You entered the wrong password.");
 });
 
 router.get("/feed", getFeed);

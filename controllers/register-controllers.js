@@ -36,7 +36,6 @@ const validateUser = [
 ];
 
 async function checkEmail(email) {
-  console.log(email);
   const existingUser = await db.getUserByEmail(email);
   if (existingUser) {
     throw new Error(usedEmailErr);
@@ -69,7 +68,6 @@ export const newMember = [
     const { salt, hashPw } = genPassword(password);
 
     const user = await db.saveUser(firstname, lastname, email, hashPw, salt);
-    console.log(user);
     res.redirect("/login");
   },
 ];

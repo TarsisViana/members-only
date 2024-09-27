@@ -6,6 +6,7 @@ import connectPg from "connect-pg-simple";
 import crypto from "crypto";
 import passport from "passport";
 import "./config/passport.js";
+import flash from "connect-flash";
 
 import pgPool from "./db/pool.js";
 

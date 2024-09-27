@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS users (
   password VARCHAR (255),
   email VARCHAR (255),
   salt VARCHAR (255),
-  member BOOLEAN NOT NULL DEFAULT false
+  member BOOLEAN NOT NULL DEFAULT false,
+  admin BOOLEAN NOT NULL DEFAULT false
 );
 
 
