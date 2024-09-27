@@ -7,10 +7,12 @@
   </head>
   <body>
     <h1>Secret</h1>
-    <form action="post" action="/member">
+    <%- include("partials/errors.ejs") %>
+    <p>go back to <a href="/feed">feed</a></p>
+    <form method="POST" action="/member">
       <label
         >Enter the password to become a club member<br />
-        <input type="password" name="member-pw" /><br />
+        <input type="password" name="memberPw" /><br />
         <input type="submit" />
       </label>
     </form>

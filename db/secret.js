@@ -5,8 +5,8 @@ import pg from "pg";
 const { Client } = pg;
 import { genPassword } from "../lib/passwordUtils.js";
 
-const memberPw = genPassword("money");
-const adminPw = genPassword("cat");
+const memberPw = genPassword(process.env.MEMBER_SECRET);
+const adminPw = genPassword(process.env.ADMIN_SECRET);
 
 const SQL = `
 CREATE TABLE IF NOT EXISTS secret (

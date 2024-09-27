@@ -19,6 +19,11 @@ async function saveUser(firstname, lastname, email, hashPw, salt) {
   await pool.query(text, [firstname, lastname, email, hashPw, salt]);
 }
 
+async function makeMember(id) {
+  const text = "UPDATE users SET member = 'true' WHERE userid = $1";
+  await pool.query(text, [id]);
+}
+
 //----- messages queries -----
 async function getMessages() {
   let text = "SELECT * FROM messages";
@@ -37,6 +42,13 @@ async function addMessage(msgtext, added, userid) {
   await pool.query(text, [msgtext, added, userid]);
 }
 
+//---- secred queries -----
+async function getSecret() {
+  const text = "SELECT * FROM secret";
+  const { rows } = await pool.query(text);
+  return rows;
+}
+
 const db = {
   getUser,
   saveUser,
@@ -44,6 +56,8 @@ const db = {
   getMessages,
   getMessagesUsers,
   addMessage,
+  getSecret,
+  makeMember,
 };
 
 export default db;
