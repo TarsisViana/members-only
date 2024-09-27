@@ -23,6 +23,11 @@ async function makeMember(id) {
   const text = "UPDATE users SET member = 'true' WHERE userid = $1";
   await pool.query(text, [id]);
 }
+async function makeAdmin(id) {
+  const text =
+    "UPDATE users SET member = 'true', admin = 't' WHERE userid = $1";
+  await pool.query(text, [id]);
+}
 
 //----- messages queries -----
 async function getMessages() {
@@ -32,7 +37,7 @@ async function getMessages() {
 }
 async function getMessagesUsers() {
   let text =
-    "SELECT msgtext,added, firstname,lastname FROM messages JOIN users ON users.userid = messages.userid";
+    "SELECT messageid,msgtext,added, firstname,lastname FROM messages JOIN users ON users.userid = messages.userid";
   const { rows } = await pool.query(text);
   return rows;
 }
@@ -40,6 +45,10 @@ async function getMessagesUsers() {
 async function addMessage(msgtext, added, userid) {
   let text = "INSERT INTO messages (msgtext,added,userid) VALUES ($1,$2,$3)";
   await pool.query(text, [msgtext, added, userid]);
+}
+async function removeMessage(id) {
+  let text = "DELETE FROM messages WHERE messageid = $1";
+  await pool.query(text, [id]);
 }
 
 //---- secred queries -----
@@ -58,6 +67,8 @@ const db = {
   addMessage,
   getSecret,
   makeMember,
+  makeAdmin,
+  removeMessage,
 };
 
 export default db;

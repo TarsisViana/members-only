@@ -4,7 +4,7 @@ import passport from "passport";
 import { newMember } from "../controllers/register-controllers.js";
 import { isAuth } from "../controllers/auth-middleware.js";
 import { getHomepage } from "../controllers/index-controllers.js";
-import { getFeed } from "../controllers/feed-controllers.js";
+import { deleteMessage, getFeed } from "../controllers/feed-controllers.js";
 import { newMessage } from "../controllers/messages-controller.js";
 import memberRouter from "./member.js";
 
@@ -23,7 +23,6 @@ router.post(
 
 router.post("/register", newMember);
 router.post("/new-message", isAuth, newMessage);
-router.post;
 
 /**
  * -------------- GET ROUTES ----------------
@@ -65,6 +64,9 @@ router.get("/feed", getFeed);
 router.get("/new-message", isAuth, (req, res) => {
   res.render("new-message-form");
 });
+
+//----- delete routes ------
+router.post("/delete/:id", deleteMessage);
 
 router.use("/member", memberRouter);
 

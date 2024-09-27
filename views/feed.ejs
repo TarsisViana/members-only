@@ -18,10 +18,15 @@
       <% locals.messages.forEach( message => { %>
       <li>
         <% if (locals.member) { %>
-        <p><%= message.firstname %></p>
+        <p><%= message.firstname %> <%= message.lastname %></p>
         <% } %>
         <p><%= message.msgtext %></p>
         <p><%= message.added %></p>
+        <% if (locals.admin) { %>
+        <form method="POST" action="/delete/<%= message.messageid %>">
+          <button type="submit">delete</button>
+        </form>
+        <% } %>
       </li>
       <% }) %>
     </ul>

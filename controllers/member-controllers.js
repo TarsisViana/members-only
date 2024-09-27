@@ -6,6 +6,15 @@ export async function addMember(req, res) {
 
   const secret = await db.getSecret();
 
+  const matchAdmin = validPassword(
+    password,
+    secret[1].password,
+    secret[1].salt
+  );
+  if (matchAdmin) {
+    await db.makeAdmin(req.user.userid);
+    res.redirect("/feed");
+  }
   const matchMember = validPassword(
     password,
     secret[0].password,
