@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message-Club</title>
+  </head>
+  <body>
+    <h1>Home</h1>
+    <p>Please <a href="/register">register</a> or <a href="/login">login</a></p>
+    <h2>message board</h2>
+    <% if (locals.messages) { %>
+    <ul>
+      <% locals.messages.forEach( message => { %>
+      <li>
+        <p><%= message.msgtext %></p>
+        <p><%= message.added %></p>
+      </li>
+      <% }) %>
+    </ul>
+    <% }else{ %>
+    <p>no messages</p>
+    <% } %>
+  </body>
+</html>

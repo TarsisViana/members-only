@@ -19,6 +19,31 @@ async function saveUser(firstname, lastname, email, hashPw, salt) {
   await pool.query(text, [firstname, lastname, email, hashPw, salt]);
 }
 
-const db = { getUser, saveUser, getUserByEmail };
+//----- messages queries -----
+async function getMessages() {
+  let text = "SELECT * FROM messages";
+  const { rows } = await pool.query(text);
+  return rows;
+}
+async function getMessagesUsers() {
+  let text =
+    "SELECT msgtext,added, firstname,lastname FROM messages JOIN users ON users.userid = messages.userid";
+  const { rows } = await pool.query(text);
+  return rows;
+}
+
+async function addMessage(msgtext, added, userid) {
+  let text = "INSERT INTO messages (msgtext,added,userid) VALUES ($1,$2,$3)";
+  await pool.query(text, [msgtext, added, userid]);
+}
+
+const db = {
+  getUser,
+  saveUser,
+  getUserByEmail,
+  getMessages,
+  getMessagesUsers,
+  addMessage,
+};
 
 export default db;

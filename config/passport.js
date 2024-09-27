@@ -1,21 +1,21 @@
-import { use, serializeUser, deserializeUser } from "passport";
+import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { getUser } from "../db/queries.js";
+import db from "../db/queries.js";
 import { validPassword } from "../lib/passwordUtils.js";
-import { query } from "../db/pool.js";
+import pool from "../db/pool.js";
 
 const customFields = {
-  usernameField: "uname",
-  passwordField: "pw",
+  usernameField: "email",
+  passwordField: "password",
 };
 
-const verifyCallback = async (username, password, done) => {
+const verifyCallback = async (email, password, done) => {
   try {
     //get user from username
-    const user = await getUser(username);
+    const user = await db.getUserByEmail(email);
 
     //if doesnt exist return done(null,false)
-    if (!user) return done(null, false, { message: "Incorrect username" });
+    if (!user) return done(null, false, { message: "Incorrect email" });
 
     //else check password
     const match = validPassword(password, user.password, user.salt);
@@ -35,15 +35,18 @@ const verifyCallback = async (username, password, done) => {
 
 const strategy = new LocalStrategy(customFields, verifyCallback);
 
-use(strategy);
+passport.use(strategy);
 
-serializeUser((user, done) => {
-  done(null, user.id);
+passport.serializeUser((user, done) => {
+  console.log(user);
+  done(null, user.userid);
 });
 
-deserializeUser(async (id, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
-    const { rows } = await query("SELECT * FROM users WHERE id = $1", [id]);
+    const { rows } = await pool.query("SELECT * FROM users WHERE userid = $1", [
+      id,
+    ]);
     const user = rows[0];
 
     done(null, user);
